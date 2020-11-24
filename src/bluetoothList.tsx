@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, FlatList} from 'react-native';
+import {StyleSheet, Text, FlatList, View} from 'react-native';
 import BluetoothSerial from 'react-native-bluetooth-serial-next';
 import Layout from './bluetoothListLayout';
 import Empty from './empty';
@@ -31,27 +31,34 @@ const App = (props) => {
     };
   }, []);
 
-  const userList = [
-    {name: 'Mehmet', key: 1},
-    {name: 'Salih', key: 2},
-    {name: 'akcan', key: 3},
-    {name: 'msa', key: 4},
-  ];
-
   const renderEmpty = () => <Empty text="Bir şey yok" />;
   const toggleBluetooth = (value) => {
     setEnable(!enable);
   };
+
+  const renderItem = (item) => (
+    <View style={{flexDirection: 'column', margin: 20}}>
+      <Text style={styles.itemText}>id : {item.id}</Text>
+      <Text style={styles.itemText}>cihaz adı : {item.name}</Text>
+    </View>
+  );
+
+  const data1 = [
+    {
+      address: 'C4:30: numarası',
+      class: 1064,
+      id: 'C4: .. numarası',
+      name: 'LG telefon',
+    },
+  ];
   return (
     <Layout title="Bluetooth">
       <Toggle value={enable} onValueChange={toggleBluetooth} />
       <SubTitle title="Alt başlık" />
       <FlatList
-        data={userList}
+        data={list}
         ListEmptyComponent={renderEmpty}
-        renderItem={({item}) => (
-          <Text style={styles.itemText}>{item.name}</Text>
-        )}
+        renderItem={({item}) => renderItem(item)}
       />
     </Layout>
   );
@@ -61,7 +68,7 @@ const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: 'white',
   },
-  itemText: {fontSize: 20, color: 'purple'},
+  itemText: {fontSize: 20, color: 'purple', padding: 10},
 });
 
 export default App;
